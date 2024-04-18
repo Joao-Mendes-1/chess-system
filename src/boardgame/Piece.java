@@ -2,6 +2,7 @@ package boardgame;
 
 public abstract class Piece {
 
+    public Object getColor;
     protected Position position;
     private Board board;
 

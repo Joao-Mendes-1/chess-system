@@ -6,7 +6,9 @@ import chess.ChessMatch;
 import chess.ChessPiece;
 import chess.ChessPosition;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Program {
@@ -16,12 +18,13 @@ public class Program {
         Scanner sc =new Scanner(System.in);
 
         ChessMatch match = new ChessMatch();
-
-        while(true){
+        List<ChessPiece> captured=new ArrayList<>();
+        while(!match.getCheckMate()){
             try{
 
                 UI.clearScreem();
-                UI.printBoard(match.getPieces());
+                UI.printMatch(match,captured);
+                //UI.printBoard(match.getPieces());
                 System.out.println();
                 System.out.print("Source: ");
                 ChessPosition source =UI.readChessPosition(sc);
@@ -35,6 +38,14 @@ public class Program {
                 ChessPosition target =UI.readChessPosition(sc);
 
                 ChessPiece capturedPiece=match.performChessMove(source,target);
+                if (capturedPiece!=null)captured.add(capturedPiece);
+
+                if(match.getPromoted() !=null){
+                    System.out.println("Enter piece for promotion (B/N/R/Q): ");
+                    String type = sc.nextLine();
+                    match.replacePromotedPiece(type);
+                }
+
             }
             catch (ChessException e){
                 System.out.println(e.getMessage());
@@ -48,7 +59,8 @@ public class Program {
 
         }
 
-
+        UI.clearScreem();
+        UI.printMatch(match,captured);
     }
 
 
